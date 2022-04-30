@@ -2,10 +2,21 @@ import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import React, {useEffect, useState} from 'react';
 import { View, Text, Dimensions, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
+import {Fontisto} from '@expo/vector-icons';
 
 const {width: SCREEN_WIDTH}= Dimensions.get("window");
 // console.log(height);
 const API_KEY= "313271bd2facf35b04eea5ad3aac96ce";
+
+const icons= {
+  Clouds: "cloudy",
+  Clear: "day-sunny",
+  Atmosphere: "cloudy-gusts",
+  Snow: "snow",
+  Rain: "rains",
+  Drizzle: "rain",
+  ThunderStorm: "lighting",
+}
 
 export default function App() {
   const [city, setCity]=useState("Loading...");
@@ -42,7 +53,7 @@ export default function App() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.weather}>
         {days.length===0 ? (
-          <View style={styles.day}>
+          <View style={{ ...styles.day, alignItems: "center"}}>
             <ActivityIndicator 
               color="white" 
               size="large"
@@ -51,7 +62,14 @@ export default function App() {
           
           days.map((day, index)=> 
           <View key={index} style={styles.day}>
-            <Text style={styles.temp}>{parseFloat(day.temp.day).toFixed(1)}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", width: "100%", justifyContent: "space-between"}}>
+            <Text style={styles.temp}>
+              {parseFloat(day.temp.day).toFixed(1)}
+            </Text>
+            <Fontisto name={icons[day.weather[0].main]} size={68} color="white"/>
+
+
+            </View>
             <Text style={styles.description}>{day.weather[0].main}</Text>
             <Text style={styles.tinyText}>{day.weather[0].description}</Text>
           </View>)
@@ -73,6 +91,7 @@ const styles= StyleSheet.create({
     alignItems: 'center',
   },
   cityName:{
+    color: "white",
     fontSize: 68,
     fontWeight: "500"
   },
@@ -83,14 +102,20 @@ const styles= StyleSheet.create({
     alignItems: 'center',
   },
   temp:{
+    color: "white",
+    marginLeft: 30,
     marginTop: 50,
-    fontSize: 128,
+    fontSize: 100,
   },
   description:{
-    marginTop: -30,
-    fontSize: 50,
+    color: "white",
+    marginLeft: -200,
+    marginTop: -10,
+    fontSize: 30,
   },
   tinyText:{
+    color: "white",
+    marginLeft: -150,
     fontSize:20,
   }
 })
